@@ -1,7 +1,6 @@
 import pandas as pd
 import requests
-import player
-from player import choice
+
 
 
 def get_monsters():
