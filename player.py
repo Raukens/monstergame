@@ -1,26 +1,45 @@
-import pandas as pd
-import requests
 import random
-
 import check
 
 
-
-
-
 class Player:
-    energy = 100
+    energy = 80
+    points_to_next = 100
+    level = 1
+    skills = 0
 
-    def __init__(self, name, level, skills, points_to_next, *args):
+    def __init__(self, name, *args):
         self.name = name
-        self.level = level
-        self.skills = skills
-        self.points_to_next = points_to_next
         self.defeated_monsters = list(args)
 
-    def damage():
-        damage_player = random.randrange(1, 40)
-        return damage_player
+    def take_fight(self, name):
+        player = Player(name)
+        win_prob = random.randrange(50, 90)
+        damage = random.randrange(1, 40)
+        if damage > (win_prob - 50):
+            print("Вы низвергли монстра, он - мертв")
+            player.energy = player.energy - 10
+            player.skills = player.skills + random.randrange(10, 50) * player.level * 1.5
+            if player.points_to_next - player.skills > 0:
+                player.points_to_next = player.points_to_next - player.skills
+            else:
+                player.level = player.level + 1
+                player.points_to_next = abs(player.points_to_next - player.skills)
+        else:
+            print("Вы потерпели поражение")
+            player.energy = player.energy - 10
+
+        return [player.name, player.level, player.energy, player.skills, player.points_to_next]
+
+    def refusal(self, name):
+
+        player = Player(name)
+        player.energy -= 3
+
+        return [player.name, player.level, player.energy, player.skills, player.points_to_next]
+
+
+
 '''
 
 [{"name":{"ptBr":"Escorpião","en":"Scorpion"},"id":1001},
@@ -35,8 +54,3 @@ class Player:
  {"name":{"ptBr":"Sapo de Rodda","en":"Roda Frog"},"id":1012}]
 
 '''
-
-
-
-
-
