@@ -1,42 +1,48 @@
 import random
 import check
-
-
+import pandas as pd
+'''
+name	level	energy	skills	points_to_next	monsters_list
+'''
 class Player:
-    energy = 80
+    energy = 100
     points_to_next = 100
     level = 1
     skills = 0
+    defeated_monsters = []
 
-    def __init__(self, name, *args):
+    def __init__(self, name):
         self.name = name
-        self.defeated_monsters = list(args)
 
-    def take_fight(self, name):
-        player = Player(name)
+    def take_fight(self):
+
         win_prob = random.randrange(50, 90)
         damage = random.randrange(1, 40)
         if damage > (win_prob - 50):
             print("Вы низвергли монстра, он - мертв")
-            player.energy = player.energy - 10
-            player.skills = player.skills + random.randrange(10, 50) * player.level * 1.5
-            if player.points_to_next - player.skills > 0:
-                player.points_to_next = player.points_to_next - player.skills
+            self.energy = (self.energy - 10) * 1.2
+            self.skills = self.skills + random.randrange(10, 50) * self.level * 1.5
+            if self.points_to_next - self.skills > 0:
+                self.points_to_next = self.points_to_next - self.skills
             else:
-                player.level = player.level + 1
-                player.points_to_next = abs(player.points_to_next - player.skills)
+                self.level = self.level + 1
+                self.points_to_next = abs(self.points_to_next - self.skills)
         else:
             print("Вы потерпели поражение")
-            player.energy = player.energy - 10
-
-        return [player.name, player.level, player.energy, player.skills, player.points_to_next]
+            self.energy = self.energy - 10
 
     def refusal(self, name):
+        self.energy -= 3
 
-        player = Player(name)
-        player.energy -= 3
-
-        return [player.name, player.level, player.energy, player.skills, player.points_to_next]
+    def load(self):
+        df = pd.read_csv('base.csv')
+        if self.name in df['name']:
+            index_sess = df.loc[df['name'].eq(self.name)].index
+            self.name = df.iloc[index_sess, 0]
+            self.level = df.iloc[index_sess, 1]
+            self.energy = df.iloc[index_sess, 2]
+            self.skills = df.iloc[index_sess, 3]
+            self.points_to_next = df.iloc[index_sess, 4]
 
 
 

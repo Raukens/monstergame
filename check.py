@@ -1,6 +1,7 @@
 import pandas as pd
 import requests
 
+from player import Player
 
 
 def get_monsters():
@@ -29,11 +30,6 @@ def player_choice():
     return is_number_proper(x, 1, 2, 3)
 
 
-def add_new_player(name):
-    gamer_data = [name, 1, 0, 0, 100]
-    return gamer_data
-
-
 def check_choices():
     choice = player_choice()
     nickname = input("Введите ник ")
@@ -43,7 +39,7 @@ def check_choices():
         exit()
     if choice == 1:
         # df = df.append(add_new_player(name), ignore_index=True)
-        row = add_new_player(nickname)
+        gamer = Player(nickname)
     if choice == 2:
         if df.empty or nickname not in df['name']:
             y = input("У вас нет сохраненных сессий, для начала новой игры введите - 4 \
@@ -52,30 +48,13 @@ def check_choices():
             if inner_choise == 3:
                 exit()
             if inner_choise == 4:
-                row = add_new_player(nickname)
+                gamer = Player(nickname)
         if nickname in df['name']:
-            previous_session = df.loc[df['name'].str.contains(nickname)].copy
-            print(previous_session)
-            prev_sess_number = input("Введите номер сессии ")
-            '''копируем выбранную сессию в переменную'''
-            row = df.iloc[0].values.tolist()
-    return row
+            gamer = Player.load(nickname)
+            # previous_session = df.loc[df['name'].str.contains(nickname)].copy
+            # print(previous_session)
+            # prev_sess_number = input("Введите номер сессии ")
+            # '''копируем выбранную сессию в переменную'''
+            # row = df.iloc[0].values.tolist()
+    return gamer
 
-class Weapon:
-    damage = 10
-    current_ammo = 30
-    ammo = 30
-    name = ''
-
-    def shoot(self, target):
-        self.cuurent_ammo -= 1
-        target.hp -= self.damage
-
-    def reload(self):
-        self.cuurent_ammon = self.ammo
-
-
-weapon = Weapon()
-weapon.name = 'Pistol'
-
-print(weapon.name)
