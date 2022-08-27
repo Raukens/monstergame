@@ -1,16 +1,19 @@
 import random
 
 import check
+import services
 import player
 from player import Player
+
 
 def choose_monster():
     random_monster = random.choice(check.get_monsters())
     monster_name = random_monster['name']['en']
     return monster_name
 
+
 def game():
-    gamer = check.check_choices()
+    gamer = services.check_choices()
 
     while gamer.energy < 0:
         print("Начинается игра")

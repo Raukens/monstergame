@@ -1,4 +1,5 @@
 import random
+import json
 import check
 import pandas as pd
 '''
@@ -16,33 +17,34 @@ class Player:
 
     def take_fight(self):
 
-        win_prob = random.randrange(50, 90)
-        damage = random.randrange(1, 40)
-        if damage > (win_prob - 50):
-            print("Вы низвергли монстра, он - мертв")
+        win_prob = random.randrange(49, 90)
+        damage = random.randrange(0, 100)
+        if damage < win_prob:
             self.energy = (self.energy - 10) * 1.2
             self.skills = self.skills + random.randrange(10, 50) * self.level * 1.5
             if self.points_to_next - self.skills > 0:
                 self.points_to_next = self.points_to_next - self.skills
             else:
-                self.level = self.level + 1
+                self.level += 1
                 self.points_to_next = abs(self.points_to_next - self.skills)
+            print(f"Вы низвергли монстра, уровень вашей энергии - {self.energy}, опыта - {self.skills}, очков до следующего уровня{self.points_to_next}")
         else:
-            print("Вы потерпели поражение")
-            self.energy = self.energy - 10
+            self.energy -= 10
+            print(f"Вы потерпели поражение, ваша энергия снизилась до {self.energy}")
 
     def refusal(self, name):
         self.energy -= 3
 
     def load(self):
-        df = pd.read_csv('base.csv')
-        if self.name in df['name']:
-            index_sess = df.loc[df['name'].eq(self.name)].index
-            self.name = df.iloc[index_sess, 0]
-            self.level = df.iloc[index_sess, 1]
-            self.energy = df.iloc[index_sess, 2]
-            self.skills = df.iloc[index_sess, 3]
-            self.points_to_next = df.iloc[index_sess, 4]
+        with open('base.json', 'w') as base:
+            json.dump({
+                "name": self.name,
+                "level": self.level,
+                "skills": self.skills,
+                "points_to_next": self.points_to_next,
+                "energy": self.energy,
+                "monsters_list": []
+            }, base)
 
 
 
