@@ -51,7 +51,7 @@ class Player:
                 "skills": self.skills,
                 "points_to_next": self.points_to_next,
                 "energy": self.energy,
-                "monsters_list": []
+                "monsters_list": self.defeated_monsters
             }, base)
 
 
