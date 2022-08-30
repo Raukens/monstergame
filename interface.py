@@ -26,5 +26,5 @@ def game():
         if monster_choice == 2:
             Player.refusal(gamer.name)
 
-    Player.save_to_base()
+    Player.save_to_base(gamer.name)
 

@@ -1,7 +1,6 @@
 import json
 
 from player import Player
-import check
 
 
 def is_number_proper(number, *args):
@@ -22,8 +21,13 @@ def player_choice():
 def check_choices():
     choice = player_choice()
     nickname = input("Введите ник ")
-    with open('base.json') as json_file:
-        data = json.load(json_file)
+    try:
+        with open(f"'{nickname}.json'") as json_file:
+            data = json.load(json_file)
+            existing_file = 1
+    except:
+        existing_file = 0
+        print("Нет сохраненных сессий с указанным ником")
 
     if choice == 3:
         exit()
@@ -31,9 +35,7 @@ def check_choices():
         # df = df.append(add_new_player(name), ignore_index=True)
         gamer = Player(nickname)
     if choice == 2:
-        for p in data['players']:
-
-        if df.empty or nickname not in df['name']:
+        if not existing_file:
             y = input("У вас нет сохраненных сессий, для начала новой игры введите - 4 \
                       Для выхода введите - 3 ")
             inner_choise = is_number_proper(y, 3, 4)
@@ -41,8 +43,8 @@ def check_choices():
                 exit()
             if inner_choise == 4:
                 gamer = Player(nickname)
-        if nickname in df['name']:
-            gamer = Player.load(nickname)
+        if existing_file:
+            gamer = data
             # previous_session = df.loc[df['name'].str.contains(nickname)].copy
             # print(previous_session)
             # prev_sess_number = input("Введите номер сессии ")
