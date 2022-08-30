@@ -1,7 +1,6 @@
 import random
 import json
-import check
-import pandas as pd
+
 '''
 name	level	energy	skills	points_to_next	monsters_list
 '''
@@ -9,9 +8,10 @@ name	level	energy	skills	points_to_next	monsters_list
 
 class Player:
     energy = 100
-    points_to_next = 100
+    points_to_next_lvl = 100
     level = 1
-    skills = 0
+    points = 0
+    points_of_level = 100
     defeated_monsters = []
 
     def __init__(self, name):
@@ -24,33 +24,34 @@ class Player:
 
         if damage > 100 - win_prob:
             self.energy = (self.energy - 10) * 1.2
-            self.skills = self.skills + random.randrange(10, 50) * self.level
-            necessary_points = self.points_to_next * 1.5 ** (self.level - 1) - self.skills
-            if necessary_points > 0:
-                self.points_to_next = necessary_points
+            self.points += random.randrange(10, 50)
+            if self.points_to_next_lvl - self.points > 0:
+                self.points_to_next_lvl -= self.points
             else:
                 self.level += 1
-                self.points_to_next = abs(necessary_points)
+                self.points_of_level *= 1.5
+                self.points_to_next_lvl = self.points_of_level - abs(self.points_to_next_lvl - self.points)
                 self.defeated_monsters.append(monster_name)
             print(
                 f"Вы низвергли монстра, уровень вашей энергии - {self.energy}, "
-                f"опыта - {self.skills}, очков до следующего уровня{self.points_to_next}")
+                f"опыта - {self.points}, очков до следующего уровня{self.points_to_next_lvl}")
         else:
             self.energy -= 10
             print(f"Вы потерпели поражение, ваша энергия снизилась до {self.energy}")
 
-    def refusal(self, name):
+    def refusal(self):
         self.energy -= 3
         print(f"Ваш уровень энергии снизился до {self.energy}")
 
     def save_to_base(self):
-        with open('base.json', 'w') as base:
+        with open(f"'{self.name}.json', 'w'") as base:
             json.dump({
                 "name": self.name,
                 "level": self.level,
-                "skills": self.skills,
-                "points_to_next": self.points_to_next,
+                "skills": self.points,
+                "points_to_next": self.points_to_next_lvl,
                 "energy": self.energy,
+                "points_of_level": self.points_of_level,
                 "monsters_list": self.defeated_monsters
             }, base)
 

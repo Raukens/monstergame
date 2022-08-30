@@ -1,5 +1,4 @@
-import pandas as pd
-import requests
+import json
 
 from player import Player
 import check
@@ -23,7 +22,7 @@ def player_choice():
 def check_choices():
     choice = player_choice()
     nickname = input("Введите ник ")
-    with open('base.txt') as json_file:
+    with open('base.json') as json_file:
         data = json.load(json_file)
 
     if choice == 3:

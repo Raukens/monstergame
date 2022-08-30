@@ -22,6 +22,9 @@ def game():
         monster_choice = input("Если желаете с ним сразиться, то введите - 1, если хотите выбрать другого, то - 2 ")
 
         if monster_choice == 1:
-            Player.take_fight(gamer.name)
+            Player.take_fight(gamer.name, monster)
         if monster_choice == 2:
             Player.refusal(gamer.name)
+
+    Player.save_to_base()
+
