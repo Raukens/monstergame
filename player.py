@@ -11,11 +11,12 @@ class Player:
     points_to_next_lvl = 100
     level = 1
     points = 0
-    points_of_level = 100
     defeated_monsters = []
 
     def __init__(self, name):
         self.name = name
+        self.energy = Player.energy
+        self.points = Player.points
 
     def take_fight(self, monster_name):
 
@@ -23,14 +24,12 @@ class Player:
         damage = random.randrange(0, 100)
 
         if damage > 100 - win_prob:
+            Player.energy = (Player.energy - 10) * 1.2
             self.energy = (self.energy - 10) * 1.2
             self.points += random.randrange(10, 50)
-            if self.points_to_next_lvl - self.points > 0:
-                self.points_to_next_lvl -= self.points
-            else:
+            if self.points_to_next_lvl - self.points < 0:
                 self.level += 1
-                self.points_of_level *= 1.5
-                self.points_to_next_lvl = self.points_of_level - abs(self.points_to_next_lvl - self.points)
+                self.points_to_next_lvl *= 1.5
                 self.defeated_monsters.append(monster_name)
             print(
                 f"Вы низвергли монстра, уровень вашей энергии - {self.energy}, "
@@ -44,17 +43,16 @@ class Player:
         print(f"Ваш уровень энергии снизился до {self.energy}")
 
     def save_to_base(self):
-        with open(f"'{self.name}.json', 'w'") as base:
-            json.dump({
-                "name": self.name,
-                "level": self.level,
-                "skills": self.points,
-                "points_to_next": self.points_to_next_lvl,
-                "energy": self.energy,
-                "points_of_level": self.points_of_level,
-                "monsters_list": self.defeated_monsters
-            }, base)
-
+        to_json = {
+            "name": self.name,
+            "level": self.level,
+            "points": self.points,
+            "points_to_next_lvl": self.points_to_next_lvl,
+            "energy": self.energy,
+            "monsters_list": self.defeated_monsters
+        }
+        with open(f"{self.name}.json, 'w'") as base:
+            base.write(json.dump(to_json))
 
 
 '''
