@@ -52,7 +52,7 @@ class Player:
             "monsters_list": self.defeated_monsters
         }
         with open(f"{self.name}.json, 'w'") as base:
-            base.write(json.dump(to_json))
+            json.dumps(to_json)
 
 
 '''
