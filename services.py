@@ -35,7 +35,7 @@ def check_choices():
         exit()
     if choice == 1:
         # df = df.append(add_new_player(name), ignore_index=True)
-        gamer = Player(nickname)
+        print('Начинается новая игра')
     if choice == 2:
         if not existing_file:
             y = int(input(
@@ -45,7 +45,7 @@ def check_choices():
             if inner_choise == 3:
                 exit()
             if inner_choise == 4:
-                gamer = Player(nickname)
+                print('Начинается новая игра')
         if existing_file:
             gamer = data
             # previous_session = df.loc[df['name'].str.contains(nickname)].copy
