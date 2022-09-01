@@ -32,11 +32,11 @@ def game():
         monster_choice = services.is_number_proper(monster_choice, 1, 2)
 
         if monster_choice == 1:
-            Player.take_fight(gamer.name, monster)
+            gamer.take_fight(monster)
         if monster_choice == 2:
-            Player.refusal(gamer.name)
+            gamer.refusal()
 
-    Player.save_to_base(gamer.name)
+    gamer.save_to_base()
 
 
 if __name__ == '__main__':
